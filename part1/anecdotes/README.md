@@ -1,3 +1,3 @@
-# Course Information app
+# Anecdotes app
 
-This app comprises exercises 1.12.-1.14.
+This app comprises exercises 1.12-1.14.
