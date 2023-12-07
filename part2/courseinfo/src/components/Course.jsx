@@ -1,6 +1,32 @@
-import Content from './Content';
-import Header from './Header';
-import Total from './Total';
+const Header = ({ course }) => {
+  return <h2>{course}</h2>;
+};
+
+const Content = ({ parts }) => {
+  return (
+    <div>
+      {parts.map((part) => (
+        <Part key={part.id} name={part.name} exercises={part.exercises} />
+      ))}
+    </div>
+  );
+};
+
+const Part = ({ name, exercises }) => {
+  return (
+    <p>
+      {name} {exercises}
+    </p>
+  );
+};
+
+const Total = ({ sum }) => {
+  return (
+    <p style={{ fontWeight: 'bold' }}>
+      total of {sum} exercise{sum > 1 && 's'}
+    </p>
+  );
+};
 
 const Course = ({ course }) => {
   const sumOfExercises = course.parts.reduce(
