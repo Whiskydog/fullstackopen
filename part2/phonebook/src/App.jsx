@@ -3,12 +3,14 @@ import { create, getAll, remove, update } from './services/persons';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
+import Notification from './components/Notification';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     getAll().then((persons) => setPersons(persons));
@@ -22,11 +24,14 @@ const App = () => {
         window.confirm(
           `${newName} is already added to the phonebook, replace the old number with a new one?`
         )
-      )
+      ) {
         replacePerson(foundPerson.id);
+        showNotification(`Changed ${newName}'s number`);
+      }
     } else {
       const newPerson = { name: newName, number: newNumber };
       create(newPerson).then((person) => setPersons(persons.concat(person)));
+      showNotification(`Added ${newName}`);
     }
     setNewName('');
     setNewNumber('');
@@ -47,6 +52,11 @@ const App = () => {
     });
   };
 
+  const showNotification = (message) => {
+    setNotification(message);
+    setTimeout(() => setNotification(null), 3000);
+  };
+
   const personsToShow = searchTerm
     ? persons.filter((person) =>
         person.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -56,6 +66,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} />
       <Filter searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <h3>Add a new</h3>
       <PersonForm
