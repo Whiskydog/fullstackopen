@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { create, getAll } from './services/persons';
+import { create, getAll, remove } from './services/persons';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
@@ -26,6 +26,12 @@ const App = () => {
     }
   };
 
+  const removePerson = (id) => {
+    remove(id).then(() => {
+      setPersons(persons.filter((p) => p.id !== id));
+    });
+  };
+
   const personsToShow = searchTerm
     ? persons.filter((person) =>
         person.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -45,7 +51,7 @@ const App = () => {
         setNewNumber={setNewNumber}
       />
       <h3>Numbers</h3>
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} removePerson={removePerson} />
     </div>
   );
 };
