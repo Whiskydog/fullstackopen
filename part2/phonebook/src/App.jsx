@@ -26,12 +26,12 @@ const App = () => {
         )
       ) {
         replacePerson(foundPerson.id);
-        showNotification(`Changed ${newName}'s number`);
+        showNotification(`Changed ${newName}'s number`, 'success');
       }
     } else {
       const newPerson = { name: newName, number: newNumber };
       create(newPerson).then((person) => setPersons(persons.concat(person)));
-      showNotification(`Added ${newName}`);
+      showNotification(`Added ${newName}`, 'success');
     }
     setNewName('');
     setNewNumber('');
@@ -39,11 +39,18 @@ const App = () => {
 
   const replacePerson = (id) => {
     const changedPerson = { name: newName, number: newNumber };
-    update(id, changedPerson).then((newPerson) =>
-      setPersons(
-        persons.map((person) => (person.id !== id ? person : newPerson))
+    update(id, changedPerson)
+      .then((newPerson) =>
+        setPersons(
+          persons.map((person) => (person.id !== id ? person : newPerson))
+        )
       )
-    );
+      .catch(() =>
+        showNotification(
+          `Information of ${newName} has already been removed from server`,
+          'error'
+        )
+      );
   };
 
   const removePerson = (id) => {
@@ -52,8 +59,8 @@ const App = () => {
     });
   };
 
-  const showNotification = (message) => {
-    setNotification(message);
+  const showNotification = (message, type) => {
+    setNotification({ message, type });
     setTimeout(() => setNotification(null), 3000);
   };
 
@@ -66,7 +73,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notification} />
+      <Notification content={notification} />
       <Filter searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <h3>Add a new</h3>
       <PersonForm

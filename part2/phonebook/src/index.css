@@ -11,3 +11,9 @@
   border-color: #1a854c;
   background-color: #d3f2e2;
 }
+
+.error {
+  border-color: #971012;
+  color: #971012;
+  background-color: #f7d1d1;
+}
