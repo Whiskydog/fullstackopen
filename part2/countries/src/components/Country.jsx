@@ -15,8 +15,9 @@ const Languages = ({ langs }) => {
 };
 
 const Weather = ({ weather }) => {
-  const icon = weather.weather[0].icon;
+  if (!weather) return null;
 
+  const icon = weather.weather[0].icon;
   return (
     <div>
       <h2>Weather in {weather.name}</h2>
@@ -44,7 +45,7 @@ const Country = ({ country }) => {
       <div>area {country.area}</div>
       <Languages langs={Object.entries(country.languages)} />
       <img src={country.flags.png} alt={country.flags.alt} />
-      {weather !== null && <Weather weather={weather} />}
+      <Weather weather={weather} />
     </div>
   );
 };
