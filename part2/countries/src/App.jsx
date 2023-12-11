@@ -20,6 +20,10 @@ const App = () => {
     country.name.common.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const showCountry = (name) => {
+    setSearchTerm(name);
+  };
+
   return (
     <div>
       <Search term={searchTerm} setTerm={setSearchTerm} />
@@ -28,7 +32,7 @@ const App = () => {
           countriesToShow.length === 1 ? (
             <Country country={countriesToShow[0]} />
           ) : (
-            <Countries countries={countriesToShow} />
+            <Countries countries={countriesToShow} showCountry={showCountry} />
           )
         ) : (
           <div>Too many matches, specify another filter</div>
