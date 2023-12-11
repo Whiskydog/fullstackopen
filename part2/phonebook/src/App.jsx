@@ -24,10 +24,8 @@ const App = () => {
         window.confirm(
           `${newName} is already added to the phonebook, replace the old number with a new one?`
         )
-      ) {
+      )
         replacePerson(foundPerson.id);
-        showNotification(`Changed ${newName}'s number`, 'success');
-      }
     } else {
       const newPerson = { name: newName, number: newNumber };
       create(newPerson).then((person) => setPersons(persons.concat(person)));
@@ -40,17 +38,19 @@ const App = () => {
   const replacePerson = (id) => {
     const changedPerson = { name: newName, number: newNumber };
     update(id, changedPerson)
-      .then((newPerson) =>
+      .then((newPerson) => {
         setPersons(
           persons.map((person) => (person.id !== id ? person : newPerson))
-        )
-      )
-      .catch(() =>
+        );
+        showNotification(`Changed ${newName}'s number`, 'success');
+      })
+      .catch(() => {
         showNotification(
           `Information of ${newName} has already been removed from server`,
           'error'
-        )
-      );
+        );
+        setPersons(persons.filter((p) => p.id !== id));
+      });
   };
 
   const removePerson = (id) => {
