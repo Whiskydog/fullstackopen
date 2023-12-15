@@ -28,8 +28,12 @@ const App = () => {
         replacePerson(foundPerson.id);
     } else {
       const newPerson = { name: newName, number: newNumber };
-      create(newPerson).then((person) => setPersons(persons.concat(person)));
-      showNotification(`Added ${newName}`, 'success');
+      create(newPerson)
+        .then((person) => {
+          setPersons(persons.concat(person));
+          showNotification(`Added ${newName}`, 'success');
+        })
+        .catch((error) => showNotification(error.response.data.error, 'error'));
     }
     setNewName('');
     setNewNumber('');
@@ -44,12 +48,16 @@ const App = () => {
         );
         showNotification(`Changed ${newName}'s number`, 'success');
       })
-      .catch(() => {
-        showNotification(
-          `Information of ${newName} has already been removed from server`,
-          'error'
-        );
-        setPersons(persons.filter((p) => p.id !== id));
+      .catch((error) => {
+        if (error.response.status === 404) {
+          showNotification(
+            `Information of ${newName} has already been removed from server`,
+            'error'
+          );
+          setPersons(persons.filter((p) => p.id !== id));
+        } else if (error.response.status === 400) {
+          showNotification(error.response.data.error, 'error');
+        }
       });
   };
 
